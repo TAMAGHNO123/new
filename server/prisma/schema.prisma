@@ -14,3 +14,18 @@ model User {
   name     String
   role     String  @default("user") // "user" or "admin"
 }
+
+model Product {
+    id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  name        String
+  category    String   // "Car", "Bike", "Smartphone", "Watch"
+  brand       String
+  model       String
+  year        Int?
+  price       Float
+  location    String?  // For vehicles
+  description String
+  imageUrls   String[] // Array of image URLs
+  status      String   @default("in stock") // "in stock" or "sold out"
+  createdAt   DateTime @default(now())
+}
