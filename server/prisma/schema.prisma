@@ -29,3 +29,30 @@ model Product {
   status      String   @default("in stock") // "in stock" or "sold out"
   createdAt   DateTime @default(now())
 }
+
+model Review {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  productId String
+  userId    String
+  rating    Int      // 1-5
+  comment   String
+  createdAt DateTime @default(now())
+}
+
+model CartItem {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId    String
+  productId String
+  quantity  Int      @default(1)
+}
+
+model Order {
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId     String?
+  items      Json     // Array of { productId, quantity, price }
+  total      Float
+  taxes      Float
+  createdAt  DateTime @default(now())
+  guestEmail String?
+  status     String   @default("pending") // e.g., pending, shipped, delivered, cancelled
+}

@@ -1,6 +1,7 @@
 import express from 'express';
 import { PrismaClient } from '@prisma/client';
 import { authMiddleware, adminMiddleware } from '../middleware/auth.js';
+import { ObjectId } from 'mongodb';
 
 const router = express.Router();
 const prisma = new PrismaClient();
@@ -91,6 +92,49 @@ router.delete('/:id', authMiddleware, adminMiddleware, async (req, res) => {
   } catch (e) {
     res.status(500).json({ error: 'Failed to delete product', details: e.message });
   }
+});
+
+// Add review to a product
+router.post('/:id/reviews', authMiddleware, async (req, res) => {
+  const { id: productId } = req.params;
+  const { rating, comment } = req.body;
+  const userId = req.user.userId;
+  try {
+    const review = await prisma.review.create({
+      data: { productId, userId, rating, comment }
+    });
+    res.json(review);
+  } catch (e) {
+    res.status(500).json({ error: 'Failed to add review', details: e.message });
+  }
+});
+
+// Get reviews for a product
+router.get('/:id/reviews', async (req, res) => {
+  const { id: productId } = req.params;
+  try {
+    const reviews = await prisma.review.findMany({
+      where: { productId }
+    });
+    res.json(reviews);
+  } catch (e) {
+    res.status(500).json({ error: 'Failed to fetch reviews', details: e.message });
+  }
+});
+
+router.get('/:id/similar', async (req, res) => {
+  const { id } = req.params;
+  const product = await prisma.product.findUnique({ where: { id } });
+  if (!product) return res.status(404).json({ error: 'Product not found' });
+
+  const similar = await prisma.product.findMany({
+    where: {
+      category: product.category,
+      id: { not: id }
+    },
+    take: 4
+  });
+  res.json(similar);
 });
 
 export default router;
