@@ -17,6 +17,9 @@ app.use('/products', productRoutes);
 app.use('/cart', carttRoutes);
 app.use('/orders', orderRoutes);
 
+
+app.use('/uploads', express.static('uploads'));
+
 // Example protected route
 app.get('/profile', authMiddleware, (req, res) => {
   res.json({ message: 'This is a protected user profile route', user: req.user });

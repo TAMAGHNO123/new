@@ -2,7 +2,8 @@ import express from 'express';
 import { PrismaClient } from '@prisma/client';
 import { authMiddleware, adminMiddleware } from '../middleware/auth.js';
 import { ObjectId } from 'mongodb';
-
+import multer from 'multer';
+const upload = multer({ dest: 'uploads/' });
 const router = express.Router();
 const prisma = new PrismaClient();
 
@@ -137,4 +138,8 @@ router.get('/:id/similar', async (req, res) => {
   res.json(similar);
 });
 
+router.post('/upload', authMiddleware, adminMiddleware, upload.single('image'), (req, res) => {
+  // In production, upload to cloud storage and return the URL
+  res.json({ url: `/uploads/${req.file.filename}` });
+});
 export default router;
