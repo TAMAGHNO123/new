@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from "react";
 import {
-  Box, Typography, Grid, Card, CardMedia, CardContent, IconButton
+  Box, Typography, Grid, Card, CardMedia, CardContent, IconButton, Paper
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import axios from "axios";
 import ProductForm from "./ProductForm";
 import ProductTable from "./ProductTable";
+import AdminLayout from "./AdminLayout";
 
 export default function AdminDashboard() {
   const [products, setProducts] = useState([]);
@@ -31,23 +32,33 @@ export default function AdminDashboard() {
     setProducts(products.filter(p => p.id !== id));
   };
 
- return (
-    <AdminLayout adminName="Admin">
-      <Typography variant="h4" mb={2}>Admin Dashboard</Typography>
-      <ProductForm onSave={fetchProducts} />
-      <Typography variant="h5" mb={2}>All Products</Typography>
-      <ProductTable
-        products={products}
-        loading={loading}
-        page={page}
-        rowsPerPage={rowsPerPage}
-        onPageChange={setPage}
-        onRowsPerPageChange={setRowsPerPage}
-        onEdit={setEditProduct}
-        onDelete={handleDelete}
-        filterCategory={filterCategory}
-        setFilterCategory={setFilterCategory}
-      />
-    </AdminLayout>
-  );
+return (
+  <AdminLayout adminName="Admin">
+    <Typography variant="h4" mb={2}>Admin Dashboard</Typography>
+    <Grid container spacing={4}>
+      <Grid item xs={12} md={4}>
+        <Paper elevation={3} className="p-4">
+          <ProductForm onSave={fetchProducts} />
+        </Paper>
+      </Grid>
+      <Grid item xs={12} md={8}>
+        <Paper elevation={3} className="p-4">
+          <Typography variant="h5" mb={2}>All Products</Typography>
+          <ProductTable
+            products={products}
+            loading={loading}
+            page={page}
+            rowsPerPage={rowsPerPage}
+            onPageChange={setPage}
+            onRowsPerPageChange={setRowsPerPage}
+            onEdit={setEditProduct}
+            onDelete={handleDelete}
+            filterCategory={filterCategory}
+            setFilterCategory={setFilterCategory}
+          />
+        </Paper>
+      </Grid>
+    </Grid>
+  </AdminLayout>
+);
 }

@@ -1,37 +1,68 @@
 import React from "react";
-import { Box, Typography, Card, CardMedia } from "@mui/material";
+import Slider from "react-slick";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
+import { Typography } from "@mui/material";
 
 const banners = [
-  { image: "/xuv", title: "Hot Deals on Cars" },
-  { image: "/banner2.jpg", title: "Latest Smartphones" },
-  { image: "/banner3.jpg", title: "Trending Watches" },
+  {
+    image: "/bike1.avif",
+    title: "Latest Bikes",
+    subtitle: "Explore our new bike arrivals",
+  },
+  {
+    image: "/car1.avif",
+    title: "Top Cars",
+    subtitle: "Best deals on cars",
+  },
+  {
+    image: "/watch1.jpeg",
+    title: "Trending Watches",
+    subtitle: "Luxury & Smartwatches",
+  },
+  {
+    image: "/sm1.jpeg",
+    title: "Smartphones",
+    subtitle: "Latest smartphones in stock",
+  },
 ];
 
+const settings = {
+  dots: true,
+  infinite: true,
+  speed: 600,
+  slidesToShow: 1,
+  slidesToScroll: 1,
+  autoplay: true,
+  autoplaySpeed: 3500,
+  arrows: false,
+  pauseOnHover: true,
+};
+
 export default function HeroCarousel() {
-  // For demo, just show first banner. Replace with a real carousel for production.
   return (
-    <Card sx={{ position: "relative", height: 280, mb: 4, borderRadius: 3, overflow: "hidden" }}>
-      <CardMedia
-        component="img"
-        image={banners[0].image}
-        alt={banners[0].title}
-        sx={{ height: "100%", width: "100%", objectFit: "cover" }}
-      />
-      <Box
-        sx={{
-          position: "absolute",
-          bottom: 24,
-          left: 24,
-          bgcolor: "rgba(0,0,0,0.5)",
-          px: 3,
-          py: 1,
-          borderRadius: 2,
-        }}
-      >
-        <Typography variant="h4" color="white" fontWeight="bold">
-          {banners[0].title}
-        </Typography>
-      </Box>
-    </Card>
+    <div
+      className="w-full max-w-5xl mx-auto rounded-3xl overflow-hidden shadow-lg mb-8 relative"
+      style={{ marginTop: "12px" }} // Moved box higher up
+    >
+      <Slider {...settings}>
+        {banners.map((banner, idx) => (
+          <div key={idx} className="relative h-[320px] md:h-[460px]">
+            <img
+              src={banner.image}
+              alt={banner.title}
+              className="w-full h-full object-contain"
+              style={{ objectPosition: "center", transform: "scale(0.85)" }}
+            />
+            <div className="absolute inset-0 bg-black/40 flex flex-col justify-end p-8">
+              <h2 className="text-2xl md:text-4xl font-bold text-white drop-shadow mb-2">
+                {banner.title}
+              </h2>
+              <p className="text-lg md:text-2xl text-white drop-shadow">{banner.subtitle}</p>
+            </div>
+          </div>
+        ))}
+      </Slider>
+    </div>
   );
 }

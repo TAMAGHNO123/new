@@ -6,6 +6,7 @@ import SaveIcon from "@mui/icons-material/Save";
 import RestartAltIcon from "@mui/icons-material/RestartAlt";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import axios from "axios";
+import { toast } from "react-toastify";
 
 const categories = [
   { value: "Car", label: "Car" },
@@ -84,27 +85,33 @@ export default function ProductForm({ productId, onSave, onCancel }) {
     setImageUrl("");
   };
 
-  const handleSubmit = async e => {
-    e.preventDefault();
-    const payload = {
-      ...form,
-      imageUrls: imageUrl ? [imageUrl] : [],
-      price: parseFloat(form.price),
-      year: form.year ? parseInt(form.year) : undefined,
-      status: "in stock",
-    };
+ const handleSubmit = async e => {
+  e.preventDefault();
+  const payload = {
+    ...form,
+    imageUrls: imageUrl ? [imageUrl] : [],
+    price: parseFloat(form.price),
+    year: form.year ? parseInt(form.year) : undefined,
+    status: "in stock",
+  };
+  try {
     if (productId) {
       await axios.put(`/products/${productId}`, payload, {
         headers: { Authorization: "Bearer " + localStorage.getItem("token") }
       });
+      toast.success("Product updated!");
     } else {
       await axios.post("/products", payload, {
         headers: { Authorization: "Bearer " + localStorage.getItem("token") }
       });
+      toast.success("Product added!");
     }
     if (onSave) onSave();
     handleReset();
-  };
+  } catch (err) {
+    toast.error("Failed to save product");
+  }
+};
 
   if (loading) {
     return (

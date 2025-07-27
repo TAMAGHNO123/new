@@ -1,5 +1,5 @@
 import React from "react";
-import { AppBar, Toolbar, Typography, IconButton, Drawer, List, ListItem, ListItemIcon, ListItemText, Box, Button } from "@mui/material";
+import { AppBar, Toolbar, Typography, IconButton, Drawer, List, ListItemButton, ListItemIcon, ListItemText, Box, Button } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import InventoryIcon from "@mui/icons-material/Inventory";
 import AddBoxIcon from "@mui/icons-material/AddBox";
@@ -41,10 +41,10 @@ export default function AdminLayout({ children, adminName = "Admin" }) {
         </Toolbar>
         <List>
           {navLinks.map(link => (
-            <ListItem button key={link.text} component={Link} to={link.to}>
+            <ListItemButton key={link.text} component={Link} to={link.to}>
               <ListItemIcon>{link.icon}</ListItemIcon>
               <ListItemText primary={link.text} />
-            </ListItem>
+            </ListItemButton>
           ))}
         </List>
       </Drawer>

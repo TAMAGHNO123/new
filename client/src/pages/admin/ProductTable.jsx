@@ -21,12 +21,16 @@ export default function ProductTable({
   setFilterCategory
 }) {
   // Filter products by category
-  const filtered = filterCategory && filterCategory !== "All"
-    ? products.filter(p => p.category === filterCategory)
-    : products;
+  const filtered = Array.isArray(products)
+    ? (filterCategory && filterCategory !== "All"
+      ? products.filter(p => p.category === filterCategory)
+      : products)
+    : [];
 
   // Paginate
-  const paginated = filtered.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
+  const paginated = Array.isArray(filtered)
+    ? filtered.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+    : [];
 
   return (
     <Paper className="mt-6 shadow rounded">
